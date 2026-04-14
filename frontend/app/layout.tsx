@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./_components/AppSidebar";
+import { ThemeProvider } from "./_components/ThemeProvider";
+import { ModeToggle } from "./_components/ModeToggle";
+import { Button } from "@/components/ui/button";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Roboto } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -24,10 +26,36 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      suppressHydrationWarning
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${roboto.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col dark:bg-[#0d1225]">
+        <SidebarProvider>
+          <TooltipProvider>
+            <AppSidebar />
+            <main className="w-full">
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <section className="flex items-center justify-between shadow w-full p-3">
+                  <SidebarTrigger />
+                  <main className="flex items-center space-x-4">
+                    <ModeToggle />
+                    <Button className="dark:bg-indigo-600 dark:text-white">
+                      Sign Up
+                    </Button>
+                  </main>
+                </section>
+                {children}
+              </ThemeProvider>
+            </main>
+          </TooltipProvider>
+        </SidebarProvider>
+      </body>
     </html>
   );
 }
