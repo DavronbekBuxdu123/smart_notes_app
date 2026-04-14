@@ -1,3 +1,9 @@
+import Notes from "./_components/Notes";
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <div>
+      <Notes />
+    </div>
+  );
 }
